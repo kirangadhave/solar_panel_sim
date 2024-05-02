@@ -1,47 +1,52 @@
 "use client";
-import { setTemperature, setVolume } from "@/lib/features/storage-tank";
-import { useAppDispatch, useAppSelector } from "@/lib/hooks";
-import { deepCopy } from "@/lib/utils/deepCopy";
-import { superscriptNumber } from "@/lib/utils/superscript";
-import { Box, Stack, Title } from "@mantine/core";
-import { useForm } from "@mantine/form";
+import { SimulationConfig } from "@/lib/simulation/types";
+import { Box, Stack } from "@mantine/core";
+import { UseFormReturnType } from "@mantine/form";
 import ConfiguratorNumericInput from "../ui/ConfiguratorNumericInput";
 
-export default function StorageTankConfigurator() {
-  const dispatch = useAppDispatch();
-  const storageTank = useAppSelector((state) => state.storageTank);
-
-  const form = useForm({
-    initialValues: deepCopy(storageTank),
-  });
-
+export default function StorageTankConfigurator({
+  form,
+}: {
+  form: UseFormReturnType<SimulationConfig>;
+}) {
   return (
-    <Box m="xs">
-      <Title order={3} mb="sm">
-        Storage Tank
-      </Title>
-      <Stack>
+    <Stack pr="sm" pl="sm" gap="xl">
+      <Box>
         <ConfiguratorNumericInput
-          form={form}
-          _key="temp"
-          label={"Temperature:"}
+          _form={form}
+          _key="storageTank.volume"
+          label={"Volume"}
+          suffix="m³"
+          step={0.01}
+          decimalScale={2}
+          fixedDecimalScale
+        />
+        <ConfiguratorNumericInput
+          _form={form}
+          _key="storageTank.surfaceArea"
+          label={"Surface Area"}
+          suffix="m²"
+          step={0.01}
+          decimalScale={2}
+          fixedDecimalScale
+        />
+      </Box>
+      <Box>
+        <ConfiguratorNumericInput
+          _form={form}
+          _key="storageTank.heatLossCoefficient"
+          label={"Heat Loss Coefficient"}
+          step={0.01}
+          decimalScale={2}
+          fixedDecimalScale
+        />
+        <ConfiguratorNumericInput
+          _form={form}
+          _key="storageTank.maxAllowedTemperature"
+          label={"Max Allowed Temp"}
           suffix="°C"
-          hideControls
-          allowNegative={false}
-          allowDecimal
-          action={setTemperature}
         />
-        <ConfiguratorNumericInput
-          form={form}
-          _key="volume"
-          label="Volume:"
-          suffix={`m${superscriptNumber(3)}`}
-          hideControls
-          allowNegative={false}
-          allowDecimal
-          action={setVolume}
-        />
-      </Stack>
-    </Box>
+      </Box>
+    </Stack>
   );
 }

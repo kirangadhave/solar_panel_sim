@@ -1,10 +1,9 @@
-"use client";
 import { SimulationConfig } from "@/lib/simulation/types";
 import { Box, Stack } from "@mantine/core";
 import { UseFormReturnType } from "@mantine/form";
 import ConfiguratorNumericInput from "../ui/ConfiguratorNumericInput";
 
-export default function SolarPanelConfigurator({
+export default function FluidConfigurator({
   form,
 }: {
   form: UseFormReturnType<SimulationConfig>;
@@ -14,15 +13,15 @@ export default function SolarPanelConfigurator({
       <Box>
         <ConfiguratorNumericInput
           _form={form}
-          _key="solarPanel.area"
-          label={"Area"}
-          suffix="m²"
+          _key="fluid.density"
+          label={"Density"}
+          suffix="kg/m³"
         />
         <ConfiguratorNumericInput
           _form={form}
-          _key="solarPanel.efficiency"
-          label={"Efficiency"}
-          suffix="%"
+          _key="fluid.specificHeat"
+          label={"Specific Heat"}
+          suffix="J/kg°C"
         />
       </Box>
     </Stack>

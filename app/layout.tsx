@@ -1,11 +1,12 @@
-import type { ReactNode } from "react";
-import type { Metadata } from "next";
 import { ColorSchemeScript, MantineProvider } from "@mantine/core";
+import type { Metadata } from "next";
+import type { ReactNode } from "react";
 
-import StoreProvider from "./StoreProvider";
-
-import "./styles/globals.css";
 import "@mantine/core/styles.css";
+import "@mantine/dates/styles.css";
+import { Provider } from "jotai";
+import "mantine-react-table/styles.css";
+import "./styles/globals.css";
 
 interface Props {
   readonly children: ReactNode;
@@ -22,9 +23,9 @@ export default function RootLayout({ children }: Props) {
         <ColorSchemeScript />
       </head>
       <body>
-        <MantineProvider>
-          <StoreProvider>{children}</StoreProvider>
-        </MantineProvider>
+        <Provider>
+          <MantineProvider>{children}</MantineProvider>
+        </Provider>
       </body>
     </html>
   );

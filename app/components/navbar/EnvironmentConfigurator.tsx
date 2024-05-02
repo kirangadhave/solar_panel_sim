@@ -1,49 +1,75 @@
-import {
-  setAmbientTemperature,
-  setIrradiance,
-} from "@/lib/features/environment";
-import { useAppDispatch, useAppSelector } from "@/lib/hooks";
-import { deepCopy } from "@/lib/utils/deepCopy";
-import { superscriptNumber } from "@/lib/utils/superscript";
-import { Box, Stack, Title } from "@mantine/core";
-import { useForm } from "@mantine/form";
+import { SimulationConfig } from "@/lib/simulation/types";
+import { Box, Stack } from "@mantine/core";
+import { UseFormReturnType } from "@mantine/form";
 import ConfiguratorNumericInput from "../ui/ConfiguratorNumericInput";
 
-export default function EnvironmentConfigurator() {
-  const dispatch = useAppDispatch();
-  const environment = useAppSelector((state) => state.environment);
+const marks = [0, 4, 8, 12, 16, 20, 24].map((hour) => ({
+  value: hour,
+  label: hour.toString(),
+}));
 
-  const form = useForm({
-    initialValues: deepCopy(environment),
-  });
-
+// ! Fix
+export default function EnvironmentConfigurator({
+  form,
+}: {
+  form: UseFormReturnType<SimulationConfig>;
+}) {
   return (
-    <Box m="xs">
-      <Title order={3} mb="sm">
-        Environment
-      </Title>
+    <Stack pr="sm" pl="sm" gap="xl">
+      <Box>
+        <ConfiguratorNumericInput
+          _form={form}
+          _key="environment.solarIrradianceConfig.sunrise"
+          label={"Sunrise"}
+          min={0}
+          max={24}
+        />
+        <ConfiguratorNumericInput
+          _form={form}
+          _key="environment.solarIrradianceConfig.sunset"
+          label={"Sunset"}
+          min={0}
+          max={24}
+        />
+        <ConfiguratorNumericInput
+          _form={form}
+          _key="environment.solarIrradianceConfig.maxIrradiance"
+          label={"Max Irradiance:"}
+          suffix=" W/m²"
+        />
+      </Box>
       <Stack>
-        <ConfiguratorNumericInput
-          form={form}
-          _key="ambientTemp"
-          label={"Ambient Temperature:"}
-          suffix="°C"
-          hideControls
-          allowNegative={false}
-          allowDecimal
-          action={setAmbientTemperature}
-        />
-        <ConfiguratorNumericInput
-          form={form}
-          _key="irradiance"
-          label="Irradiance:"
-          suffix={`W/m${superscriptNumber(2)}`}
-          hideControls
-          allowNegative={false}
-          allowDecimal
-          action={setIrradiance}
-        />
+        <Box>
+          <ConfiguratorNumericInput
+            _form={form}
+            _key="environment.ambientTemperatureConfig.maxTemp"
+            label={"Max Ambient Temp:"}
+            suffix="°C"
+          />
+          <ConfiguratorNumericInput
+            _form={form}
+            _key="environment.ambientTemperatureConfig.maxTempTime"
+            label={"Max Temp Time"}
+            min={0}
+            max={24}
+          />
+        </Box>
+        <Box>
+          <ConfiguratorNumericInput
+            _form={form}
+            _key="environment.ambientTemperatureConfig.minTemp"
+            label={"Min Ambient Temp:"}
+            suffix="°C"
+          />
+          <ConfiguratorNumericInput
+            _form={form}
+            _key="environment.ambientTemperatureConfig.minTempTime"
+            label={"Min Temp Time"}
+            min={0}
+            max={24}
+          />
+        </Box>
       </Stack>
-    </Box>
+    </Stack>
   );
 }
