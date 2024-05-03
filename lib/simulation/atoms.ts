@@ -3,15 +3,18 @@ import { atomWithStorage } from "jotai/utils";
 import { useCallback, useMemo } from "react";
 import { SimulationConfig, SimulationRun, SimulationSession } from "./types";
 
+// Create an atom to store the list of sessions
 export const sessionListAtom = atomWithStorage<
   Record<string, SimulationSession>
 >("solar-panel-sims-sessions", {});
 
+// Create an atom to store the list of visible sessions
 export const visibleSessionsAtom = atomWithStorage<string[]>(
   "solar-panel-sims-visible-sessions",
   []
 );
 
+// Hook to manage visible sessions
 export function useVisibleSessions() {
   const [sessionList] = useAtom(sessionListAtom);
   const [visibleSessions, setVisibleSessions] = useAtom(visibleSessionsAtom);
@@ -39,6 +42,7 @@ export function useVisibleSessions() {
   ] as const;
 }
 
+// Hook to manage sessions
 export function useSessions() {
   const [sessionList, setSessionList] = useAtom(sessionListAtom);
 
@@ -49,6 +53,7 @@ export function useSessions() {
   return { deleteSessions };
 }
 
+// Hook to manage a specific session
 export function useSession(id: string) {
   const [sessionList, setSessionList] = useAtom(sessionListAtom);
   const [visibleSessions, actions] = useVisibleSessions();
