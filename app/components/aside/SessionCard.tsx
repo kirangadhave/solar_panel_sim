@@ -13,12 +13,10 @@ import {
   ThemeIcon,
 } from "@mantine/core";
 import {
-  IconCheck,
   IconDotsVertical,
   IconEye,
   IconEyeOff,
   IconTrash,
-  IconX,
 } from "@tabler/icons-react";
 import { useRef, useState } from "react";
 
@@ -44,8 +42,20 @@ export function SessionCard({ id }: { id: string }) {
                 defaultValue={session.name}
                 size="xs"
                 variant="unstyled"
+                autoFocus
                 style={{
                   borderBottom: "1px solid var(--mantine-color-gray-5)",
+                }}
+                onKeyDown={(event) => {
+                  if (event.key === "Enter") {
+                    const newName = event.currentTarget.value.trim();
+                    if (newName.length > 0) {
+                      setSessionName(newName);
+                    }
+                    setEditName(false);
+                  } else if (event.key === "Escape") {
+                    setEditName(false);
+                  }
                 }}
                 onBlur={(event) => {
                   const newName = event.target.value.trim();
@@ -55,39 +65,6 @@ export function SessionCard({ id }: { id: string }) {
                   setEditName(false);
                 }}
                 mb="xs"
-                rightSectionWidth="auto"
-                rightSection={
-                  <Group gap="xs">
-                    <ActionIcon
-                      size="xs"
-                      variant="transparent"
-                      c="green"
-                      onClick={(event) => {
-                        const txtBox = textBoxRef.current;
-
-                        if (!txtBox) return;
-                        const newName = txtBox.value.trim();
-
-                        if (newName.length > 0) {
-                          setSessionName(newName);
-                        }
-                        setEditName(false);
-                      }}
-                    >
-                      <IconCheck />
-                    </ActionIcon>
-                    <ActionIcon
-                      size="xs"
-                      variant="transparent"
-                      c="red"
-                      onClick={() => {
-                        setEditName(false);
-                      }}
-                    >
-                      <IconX />
-                    </ActionIcon>
-                  </Group>
-                }
               />
             ) : (
               <Text
@@ -189,7 +166,7 @@ export function SessionCard({ id }: { id: string }) {
           {/* ---- */}
           <Box>
             <Text size="xs" span fw="500">
-              Total Heat Loss:{" "}
+              Total Ambient Heat Loss:{" "}
             </Text>
             <Text size="xs" span fw="500">
               {session.runs[

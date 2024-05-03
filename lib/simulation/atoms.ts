@@ -106,6 +106,11 @@ export const addSessionAtom = atom(
       runs,
     };
 
+    const sessionList = get(sessionListAtom);
+    if (Object.keys(sessionList).length >= 10) {
+      return;
+    }
+
     set(sessionListAtom, { ...get(sessionListAtom), [session.id]: session });
     set(visibleSessionsAtom, (sessions) => [session.id, ...sessions]);
   }

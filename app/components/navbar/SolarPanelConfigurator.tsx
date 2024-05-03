@@ -16,12 +16,14 @@ export default function SolarPanelConfigurator({
           _form={form}
           _key="solarPanel.area"
           label={"Area"}
+          description="Effective area of the solar panel"
           suffix="m²"
         />
         <ConfiguratorNumericInput
           _form={form}
           _key="solarPanel.efficiency"
           label={"Efficiency"}
+          description="Efficiency of the solar panel"
           suffix="%"
         />
       </Box>

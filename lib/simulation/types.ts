@@ -4,6 +4,7 @@ import { SolarPanelConfig } from "./models/solarPanel";
 import { StorageTankConfig } from "./models/storageTank";
 
 export type SimulationConfig = {
+  timeStep: number;
   environment: EnvironmentConfig;
   fluid: FluidConfig;
   solarPanel: SolarPanelConfig;

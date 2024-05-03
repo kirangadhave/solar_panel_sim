@@ -1,27 +1,43 @@
-import { addSessionAtom } from "@/lib/simulation/atoms";
+"use client";
+import { addSessionAtom, sessionListAtom } from "@/lib/simulation/atoms";
 import { runSimulation } from "@/lib/simulation/calculations";
 import { SimulationConfig } from "@/lib/simulation/types";
 import {
   Accordion,
+  AccordionControlProps,
   AccordionItem,
+  ActionIcon,
   AppShell,
   Button,
+  Center,
   Divider,
   Group,
+  HoverCard,
   ScrollArea,
+  Stack,
+  Text,
+  ThemeIcon,
+  Tooltip,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useSessionStorage } from "@mantine/hooks";
+import {
+  IconPlayerPlay,
+  IconQuestionMark,
+  IconRestore,
+} from "@tabler/icons-react";
 import { useAtom } from "jotai";
 import { v4 } from "uuid";
 import EnvironmentConfigurator from "./EnvironmentConfigurator";
 import FluidConfigurator from "./FluidConfigurator";
 import SolarPanelConfigurator from "./SolarPanelConfigurator";
 import StorageTankConfigurator from "./StorageTankConfigurator";
+import { TimeStepConfigurator } from "./TimeStepConfigurator";
 
 const SOLAR_SIM_CONFIG_KEY = "solar_simulation_config";
 
 const initialConfig: SimulationConfig = {
+  timeStep: 3600,
   environment: {
     ambientTemperatureConfig: {
       maxTemp: 30,
@@ -55,6 +71,7 @@ const initialConfig: SimulationConfig = {
 export default function Navbar() {
   const localConfig = sessionStorage.getItem(SOLAR_SIM_CONFIG_KEY);
 
+  const [sessionList] = useAtom(sessionListAtom);
   const [_, addSession] = useAtom(addSessionAtom);
 
   const [openAccordion, setOpenAccordion] = useSessionStorage<string[]>({
@@ -72,6 +89,12 @@ export default function Navbar() {
     validateInputOnChange: true,
     clearInputErrorOnChange: true,
     validate: {
+      timeStep(value) {
+        if (value < 60) {
+          return "Time step must be greater than 60 seconds";
+        }
+        return null;
+      },
       environment: {
         solarIrradianceConfig: {
           sunrise(value) {
@@ -96,33 +119,58 @@ export default function Navbar() {
 
   return (
     <>
-      <AppShell.Section grow component={ScrollArea}>
+      <Stack gap="0">
         <Group p="sm" justify="center">
-          <Button
-            size="sm"
-            onClick={() => {
-              const config = form.getValues();
-
-              const id = v4();
-
-              const runs = runSimulation(id, config, 3600);
-
-              addSession(id, config, runs);
-            }}
+          <Tooltip
+            label="Run simulation for 24 hours starting at midnight. Maximum of 10 sessions allowed."
+            openDelay={300}
           >
-            Run
-          </Button>
+            <Button
+              disabled={Object.keys(sessionList).length >= 10}
+              size="xs"
+              onClick={() => {
+                const config = form.getValues();
 
-          <Button
-            size="sm"
-            onClick={() => {
-              form.setValues(initialConfig);
-            }}
+                const id = v4();
+
+                const runs = runSimulation(
+                  id,
+                  config,
+                  form.getValues().timeStep
+                );
+
+                addSession(id, config, runs);
+              }}
+              leftSection={<IconPlayerPlay size="1.2rem" />}
+            >
+              Run
+            </Button>
+          </Tooltip>
+
+          <Tooltip
+            label="Reset all configuration to default values."
+            openDelay={300}
           >
-            Reset
-          </Button>
+            <Button
+              size="xs"
+              onClick={() => {
+                form.setValues(initialConfig);
+              }}
+              leftSection={<IconRestore size="1.2rem" />}
+            >
+              Reset
+            </Button>
+          </Tooltip>
         </Group>
-        <Divider />
+        <TimeStepConfigurator form={form} key={form.getValues().timeStep} />
+      </Stack>
+      <Divider />
+      <AppShell.Section
+        grow
+        component={ScrollArea}
+        type="auto"
+        offsetScrollbars
+      >
         <Accordion
           multiple={true}
           value={openAccordion}
@@ -130,13 +178,63 @@ export default function Navbar() {
           chevronPosition="left"
         >
           <AccordionItem value="env">
-            <Accordion.Control>Environment</Accordion.Control>
+            <Accordion.Control
+              icon={
+                <HoverCard
+                  position="right"
+                  withArrow
+                  shadow="xs"
+                  closeDelay={500}
+                >
+                  <HoverCard.Target>
+                    <ThemeIcon
+                      radius="xl"
+                      size="sm"
+                      color="gray"
+                      variant="light"
+                    >
+                      <IconQuestionMark size="1rem" fontWeight="bold" />
+                    </ThemeIcon>
+                  </HoverCard.Target>
+                  <HoverCard.Dropdown>
+                    <Text size="sm">Test</Text>
+                  </HoverCard.Dropdown>
+                </HoverCard>
+              }
+            >
+              Environment
+            </Accordion.Control>
             <Accordion.Panel>
               <EnvironmentConfigurator form={form} />
             </Accordion.Panel>
           </AccordionItem>
           <AccordionItem value="sp">
-            <Accordion.Control>Solar Panel</Accordion.Control>
+            <Accordion.Control
+              icon={
+                <HoverCard
+                  position="right"
+                  withArrow
+                  shadow="xs"
+                  closeDelay={500}
+                >
+                  <HoverCard.Target>
+                    <ThemeIcon
+                      radius="xl"
+                      size="sm"
+                      color="gray"
+                      variant="light"
+                    >
+                      <IconQuestionMark size="1rem" fontWeight="bold" />
+                    </ThemeIcon>
+                  </HoverCard.Target>
+                  <HoverCard.Dropdown>
+                    <Text size="sm">Test</Text>
+                  </HoverCard.Dropdown>
+                </HoverCard>
+              }
+            >
+              Solar Panel
+            </Accordion.Control>
             <Accordion.Panel>
               <SolarPanelConfigurator
                 form={form}
@@ -145,7 +243,32 @@ export default function Navbar() {
             </Accordion.Panel>
           </AccordionItem>
           <AccordionItem value="st">
-            <Accordion.Control>Storage Tank</Accordion.Control>
+            <Accordion.Control
+              icon={
+                <HoverCard
+                  position="right"
+                  withArrow
+                  shadow="xs"
+                  closeDelay={500}
+                >
+                  <HoverCard.Target>
+                    <ThemeIcon
+                      radius="xl"
+                      size="sm"
+                      color="gray"
+                      variant="light"
+                    >
+                      <IconQuestionMark size="1rem" fontWeight="bold" />
+                    </ThemeIcon>
+                  </HoverCard.Target>
+                  <HoverCard.Dropdown>
+                    <Text size="sm">Test</Text>
+                  </HoverCard.Dropdown>
+                </HoverCard>
+              }
+            >
+              Storage Tank
+            </Accordion.Control>
             <Accordion.Panel>
               <StorageTankConfigurator
                 form={form}
@@ -154,7 +277,32 @@ export default function Navbar() {
             </Accordion.Panel>
           </AccordionItem>
           <AccordionItem value="fl">
-            <Accordion.Control>Fluid</Accordion.Control>
+            <Accordion.Control
+              icon={
+                <HoverCard
+                  position="right"
+                  withArrow
+                  shadow="xs"
+                  closeDelay={500}
+                >
+                  <HoverCard.Target>
+                    <ThemeIcon
+                      radius="xl"
+                      size="sm"
+                      color="gray"
+                      variant="light"
+                    >
+                      <IconQuestionMark size="1rem" fontWeight="bold" />
+                    </ThemeIcon>
+                  </HoverCard.Target>
+                  <HoverCard.Dropdown>
+                    <Text size="sm">Test</Text>
+                  </HoverCard.Dropdown>
+                </HoverCard>
+              }
+            >
+              Fluid
+            </Accordion.Control>
             <Accordion.Panel>
               <FluidConfigurator
                 form={form}
@@ -165,5 +313,16 @@ export default function Navbar() {
         </Accordion>
       </AppShell.Section>
     </>
+  );
+}
+
+function AccordionControl(props: AccordionControlProps) {
+  return (
+    <Center mr="xs">
+      <AccordionControl {...props} />
+      <ActionIcon size="sm" color="gray" radius="xl">
+        <IconQuestionMark size="1rem" />
+      </ActionIcon>
+    </Center>
   );
 }

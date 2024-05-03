@@ -37,9 +37,14 @@ export default function Aside() {
 
   return (
     <>
-      <Title ta="center" fw={500} order={3}>
-        Previous Sessions
-      </Title>
+      <Group justify="space-between">
+        <Title fw={500} order={4}>
+          Previous Sessions
+        </Title>
+        <Title fw={500} order={6} c="gray">
+          {Object.keys(sessionList).length}/10
+        </Title>
+      </Group>
       <Divider mb="xs" />
       {sessionKeys.length === 0 ? (
         <Text ta="center">Please run a simulation using the left side-bar</Text>

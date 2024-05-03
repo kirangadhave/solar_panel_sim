@@ -1,14 +1,9 @@
+"use client";
 import { SimulationConfig } from "@/lib/simulation/types";
 import { Box, Stack } from "@mantine/core";
 import { UseFormReturnType } from "@mantine/form";
 import ConfiguratorNumericInput from "../ui/ConfiguratorNumericInput";
 
-const marks = [0, 4, 8, 12, 16, 20, 24].map((hour) => ({
-  value: hour,
-  label: hour.toString(),
-}));
-
-// ! Fix
 export default function EnvironmentConfigurator({
   form,
 }: {
@@ -20,6 +15,7 @@ export default function EnvironmentConfigurator({
         <ConfiguratorNumericInput
           _form={form}
           _key="environment.solarIrradianceConfig.sunrise"
+          description="Between 0 and 24 hours"
           label={"Sunrise"}
           min={0}
           max={24}
@@ -28,6 +24,7 @@ export default function EnvironmentConfigurator({
           _form={form}
           _key="environment.solarIrradianceConfig.sunset"
           label={"Sunset"}
+          description="Between 0 and 24 hours"
           min={0}
           max={24}
         />
@@ -35,6 +32,7 @@ export default function EnvironmentConfigurator({
           _form={form}
           _key="environment.solarIrradianceConfig.maxIrradiance"
           label={"Max Irradiance:"}
+          description="Maximum solar irradiance during the day"
           suffix=" W/m²"
         />
       </Box>
@@ -50,6 +48,7 @@ export default function EnvironmentConfigurator({
             _form={form}
             _key="environment.ambientTemperatureConfig.maxTempTime"
             label={"Max Temp Time"}
+            description="Between 0 and 24 hours"
             min={0}
             max={24}
           />
@@ -65,6 +64,7 @@ export default function EnvironmentConfigurator({
             _form={form}
             _key="environment.ambientTemperatureConfig.minTempTime"
             label={"Min Temp Time"}
+            description="Between 0 and 24 hours"
             min={0}
             max={24}
           />
