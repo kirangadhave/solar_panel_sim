@@ -44,6 +44,17 @@ The density and specific heat capacity of the fluid determine change in fluid's 
 - The application uses the [Jotai](https://jotai.org/) for light state management. The visualizations are crafted using custom VegaLite specification and the [react-vega](https://github.com/vega/react-vega) package.
 - The data table is rendered using the [Mantine React Table](https://v2.mantine-react-table.com/) library.
 
+## Code
+
+- `app` folder contains the react code for the application
+    - `app/components` contains the three main components and subcomponents
+    - `app/ui` contains the reusable components
+- `lib` contains the non-ui code like the models and calculations
+    - `lib/simulation/models` contains the models for the simulated components
+    - `lib/atoms` has the state for different simulation runs
+    - `lib/types` has the type defs for the simulation, config and results
+    - `lib/calculations` has the main simulation code
+
 ## Development
 
 The web app is a Next.js app and automatically deploys to github pages on pushing to main branch.
