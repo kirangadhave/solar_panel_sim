@@ -12,11 +12,8 @@ import {
   Center,
   Divider,
   Group,
-  HoverCard,
   ScrollArea,
   Stack,
-  Text,
-  ThemeIcon,
   Tooltip,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
@@ -180,63 +177,13 @@ export default function Navbar() {
           chevronPosition="left"
         >
           <AccordionItem value="env">
-            <Accordion.Control
-              icon={
-                <HoverCard
-                  position="right"
-                  withArrow
-                  shadow="xs"
-                  closeDelay={500}
-                >
-                  <HoverCard.Target>
-                    <ThemeIcon
-                      radius="xl"
-                      size="sm"
-                      color="gray"
-                      variant="light"
-                    >
-                      <IconQuestionMark size="1rem" fontWeight="bold" />
-                    </ThemeIcon>
-                  </HoverCard.Target>
-                  <HoverCard.Dropdown>
-                    <Text size="sm">Test</Text>
-                  </HoverCard.Dropdown>
-                </HoverCard>
-              }
-            >
-              Environment
-            </Accordion.Control>
+            <Accordion.Control>Environment</Accordion.Control>
             <Accordion.Panel>
               <EnvironmentConfigurator form={form} />
             </Accordion.Panel>
           </AccordionItem>
           <AccordionItem value="sp">
-            <Accordion.Control
-              icon={
-                <HoverCard
-                  position="right"
-                  withArrow
-                  shadow="xs"
-                  closeDelay={500}
-                >
-                  <HoverCard.Target>
-                    <ThemeIcon
-                      radius="xl"
-                      size="sm"
-                      color="gray"
-                      variant="light"
-                    >
-                      <IconQuestionMark size="1rem" fontWeight="bold" />
-                    </ThemeIcon>
-                  </HoverCard.Target>
-                  <HoverCard.Dropdown>
-                    <Text size="sm">Test</Text>
-                  </HoverCard.Dropdown>
-                </HoverCard>
-              }
-            >
-              Solar Panel
-            </Accordion.Control>
+            <Accordion.Control>Solar Panel</Accordion.Control>
             <Accordion.Panel>
               <SolarPanelConfigurator
                 form={form}
@@ -245,32 +192,7 @@ export default function Navbar() {
             </Accordion.Panel>
           </AccordionItem>
           <AccordionItem value="st">
-            <Accordion.Control
-              icon={
-                <HoverCard
-                  position="right"
-                  withArrow
-                  shadow="xs"
-                  closeDelay={500}
-                >
-                  <HoverCard.Target>
-                    <ThemeIcon
-                      radius="xl"
-                      size="sm"
-                      color="gray"
-                      variant="light"
-                    >
-                      <IconQuestionMark size="1rem" fontWeight="bold" />
-                    </ThemeIcon>
-                  </HoverCard.Target>
-                  <HoverCard.Dropdown>
-                    <Text size="sm">Test</Text>
-                  </HoverCard.Dropdown>
-                </HoverCard>
-              }
-            >
-              Storage Tank
-            </Accordion.Control>
+            <Accordion.Control>Storage Tank</Accordion.Control>
             <Accordion.Panel>
               <StorageTankConfigurator
                 form={form}
@@ -279,32 +201,7 @@ export default function Navbar() {
             </Accordion.Panel>
           </AccordionItem>
           <AccordionItem value="fl">
-            <Accordion.Control
-              icon={
-                <HoverCard
-                  position="right"
-                  withArrow
-                  shadow="xs"
-                  closeDelay={500}
-                >
-                  <HoverCard.Target>
-                    <ThemeIcon
-                      radius="xl"
-                      size="sm"
-                      color="gray"
-                      variant="light"
-                    >
-                      <IconQuestionMark size="1rem" fontWeight="bold" />
-                    </ThemeIcon>
-                  </HoverCard.Target>
-                  <HoverCard.Dropdown>
-                    <Text size="sm">Test</Text>
-                  </HoverCard.Dropdown>
-                </HoverCard>
-              }
-            >
-              Fluid
-            </Accordion.Control>
+            <Accordion.Control>Fluid</Accordion.Control>
             <Accordion.Panel>
               <FluidConfigurator
                 form={form}
