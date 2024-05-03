@@ -22,7 +22,6 @@ export default function ConfiguratorNumericInput<K>({
       rightSectionWidth="auto"
       stepHoldDelay={500}
       stepHoldInterval={(t) => Math.max(1000 / t ** 2, 25)}
-      autoFocus
       {...rest}
     />
   );
