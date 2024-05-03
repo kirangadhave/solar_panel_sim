@@ -5,6 +5,7 @@ export type StorageTankModel = {
   volume: number;
   heatLossCoefficient: number;
   maxAllowedTemperature: number;
+  initialTemperature: number;
   calculateHeatLoss: (
     fluidTemperature: number,
     environment: Environment,
@@ -32,6 +33,7 @@ export type StorageTankConfig = {
   surfaceArea: number;
   heatLossCoefficient: number;
   maxAllowedTemperature: number;
+  initialTemperature: number;
 };
 
 export function createStorageTankModel({
@@ -39,11 +41,13 @@ export function createStorageTankModel({
   surfaceArea,
   heatLossCoefficient,
   maxAllowedTemperature,
+  initialTemperature,
 }: StorageTankConfig): StorageTankModel {
   return {
     volume,
     heatLossCoefficient,
     maxAllowedTemperature,
+    initialTemperature,
     calculateHeatLoss(fluidTemperature, environment, time) {
       return (
         heatLossCoefficient *

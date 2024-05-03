@@ -1,4 +1,4 @@
-import { sessionAtom } from "@/app/page";
+import { addSessionAtom } from "@/lib/simulation/atoms";
 import { runSimulation } from "@/lib/simulation/calculations";
 import { SimulationConfig } from "@/lib/simulation/types";
 import {
@@ -44,6 +44,7 @@ const initialConfig: SimulationConfig = {
     maxAllowedTemperature: 70,
     volume: 0.15,
     surfaceArea: parseFloat((0.15 * 2 * Math.PI * 0.1).toFixed(2)),
+    initialTemperature: 26,
   },
   fluid: {
     density: 1000,
@@ -54,7 +55,7 @@ const initialConfig: SimulationConfig = {
 export default function Navbar() {
   const localConfig = sessionStorage.getItem(SOLAR_SIM_CONFIG_KEY);
 
-  const [_, setSession] = useAtom(sessionAtom);
+  const [_, addSession] = useAtom(addSessionAtom);
 
   const [openAccordion, setOpenAccordion] = useSessionStorage<string[]>({
     key: "solar_simulation_open_accordion",
@@ -96,18 +97,17 @@ export default function Navbar() {
   return (
     <>
       <AppShell.Section grow component={ScrollArea}>
-        <Group p="sm" justify="space-between">
+        <Group p="sm" justify="center">
           <Button
             size="sm"
             onClick={() => {
               const config = form.getValues();
-              console.log(JSON.stringify(config, null, 2));
 
-              setSession({
-                id: v4(),
-                config,
-                runs: runSimulation(config, 3600),
-              });
+              const id = v4();
+
+              const runs = runSimulation(id, config, 3600);
+
+              addSession(id, config, runs);
             }}
           >
             Run

@@ -12,20 +12,19 @@ export type SimulationConfig = {
 
 export type SimulationRun = {
   time: number;
+  session_id: string;
   initialTemperature: number;
   finalTemperature: number;
   heatAdded: number;
   cummulativeHeatAdded: number;
   heatLossAmbient: number;
   cummulativeHeatLossAmbient: number;
-  heatLossDump: number;
-  cummulativeHeatLossDump: number;
-  totalHeatLoss: number;
-  cummulativeTotalHeatLoss: number;
 };
 
 export type SimulationSession = {
   id: string;
+  name: string;
+  createdOn: string;
   config: SimulationConfig;
   runs: Array<SimulationRun>;
 };

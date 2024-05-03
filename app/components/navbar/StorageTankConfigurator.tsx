@@ -30,6 +30,12 @@ export default function StorageTankConfigurator({
           decimalScale={2}
           fixedDecimalScale
         />
+        <ConfiguratorNumericInput
+          _form={form}
+          _key="storageTank.initialTemperature"
+          label={"Initial Temp"}
+          suffix="°C"
+        />
       </Box>
       <Box>
         <ConfiguratorNumericInput

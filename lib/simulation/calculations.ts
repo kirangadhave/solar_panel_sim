@@ -4,49 +4,59 @@ import { createSolarPanelModel } from "./models/solarPanel";
 import { createStorageTankModel } from "./models/storageTank";
 import { SimulationConfig, SimulationRun } from "./types";
 
-export function runSimulation(config: SimulationConfig, timeStep = 60) {
+export function runSimulation(
+  session_id: string,
+  config: SimulationConfig,
+  timeStep = 60
+) {
   const env = createEnvironmentModel(config.environment);
   const fluid = createFluid(config.fluid);
   const solarPanel = createSolarPanelModel(config.solarPanel);
   const storageTank = createStorageTankModel(config.storageTank);
 
-  const arr: any[] = [];
-  let temp = 26;
-  let temp2 = 26;
+  const arr: Array<SimulationRun> = [];
+  let currentInitialTemp = config.storageTank.initialTemperature;
 
-  for (let i = timeStep; i <= 24 * 3600; i += timeStep) {
+  for (let time = timeStep; time <= 24 * 3600; time += timeStep) {
     const heatToAdd = solarPanel.calculateHeatEnergy(
       env.solarIrradiance,
-      i - timeStep,
+      time - timeStep,
       timeStep
     );
 
-    const newTemp = storageTank.calculateSafeTemperature(
-      temp,
+    const heatLoss = storageTank.calculateHeatLoss(
+      currentInitialTemp,
+      env,
+      time
+    );
+
+    const finalTemperature = storageTank.calculateSafeTemperature(
+      currentInitialTemp,
       heatToAdd,
-      i,
+      time,
       env,
       fluid
     );
-    const unHingedNewTemp = storageTank.calculateSafeTemperature(
-      temp2,
-      heatToAdd,
-      i,
-      env,
-      fluid,
-      100
-    );
+
+    const isFirst = time === timeStep;
 
     arr.push({
-      i,
-      temp,
-      newTemp,
-      unHingedNewTemp,
+      time,
+      session_id,
+      initialTemperature: currentInitialTemp,
+      finalTemperature,
+      heatAdded: heatToAdd,
+      cummulativeHeatAdded: isFirst
+        ? heatToAdd
+        : arr[arr.length - 1].cummulativeHeatAdded + heatToAdd,
+      heatLossAmbient: heatLoss,
+      cummulativeHeatLossAmbient: isFirst
+        ? heatLoss
+        : arr[arr.length - 1].cummulativeHeatLossAmbient + heatLoss,
     });
 
-    temp = newTemp;
-    temp2 = unHingedNewTemp;
+    currentInitialTemp = finalTemperature;
   }
 
-  return arr as SimulationRun[];
+  return arr;
 }

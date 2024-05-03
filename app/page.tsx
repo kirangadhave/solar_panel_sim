@@ -1,22 +1,10 @@
 "use client";
-import { SimulationSession } from "@/lib/simulation/types";
 import { ActionIcon, AppShell, Burger, Group, Text } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { IconHistory } from "@tabler/icons-react";
-import { atomWithStorage } from "jotai/utils";
-import { v4 } from "uuid";
-import MainTable from "./components/MainTable";
 import Aside from "./components/aside/Aside";
+import { Main } from "./components/main/Main";
 import Navbar from "./components/navbar/Navbar";
-
-export const sessionAtom = atomWithStorage<SimulationSession>(
-  "SOLAR_SIM_SESSIONS",
-  {
-    id: v4(),
-    config: null as any,
-    runs: [],
-  }
-);
 
 export default function IndexPage() {
   const [configuratorOpened, { toggle: configuratorToggle }] = useDisclosure();
@@ -27,14 +15,14 @@ export default function IndexPage() {
       header={{ height: 60 }}
       footer={{ height: 60 }}
       navbar={{
-        width: 250,
+        width: 300,
         breakpoint: "sm",
         collapsed: {
           mobile: !configuratorOpened,
         },
       }}
       aside={{
-        width: 250,
+        width: 300,
         breakpoint: "sm",
         collapsed: {
           mobile: !historyOpened,
@@ -68,7 +56,7 @@ export default function IndexPage() {
       </AppShell.Navbar>
 
       <AppShell.Main>
-        <MainTable />
+        <Main />
       </AppShell.Main>
 
       <AppShell.Aside p="md">

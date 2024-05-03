@@ -1,3 +1,4 @@
+import { sessionListAtom } from "@/lib/simulation/atoms";
 import { SimulationRun } from "@/lib/simulation/types";
 import { useAtom } from "jotai";
 import {
@@ -6,10 +7,9 @@ import {
   useMantineReactTable,
 } from "mantine-react-table";
 import { useMemo } from "react";
-import { sessionAtom } from "../page";
 
 export default function MainTable() {
-  const [session] = useAtom(sessionAtom);
+  const [sessionList] = useAtom(sessionListAtom);
 
   const columns = useMemo<MRT_ColumnDef<SimulationRun>[]>(
     () => [
@@ -40,12 +40,18 @@ export default function MainTable() {
         header: "Unsafe New Temp",
       },
     ],
+
     []
   );
 
   const table = useMantineReactTable({
     columns,
     data: session.runs,
+    initialState: {
+      density: "xs",
+    },
+    enableDensityToggle: false,
+    enableFullScreenToggle: false,
   });
 
   return <MantineReactTable table={table} />;
