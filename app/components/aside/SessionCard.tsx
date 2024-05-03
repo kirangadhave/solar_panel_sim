@@ -2,8 +2,10 @@ import { useSession } from "@/lib/simulation/atoms";
 import {
   ActionIcon,
   Box,
+  Code,
   Divider,
   Group,
+  HoverCard,
   Menu,
   NumberFormatter,
   Paper,
@@ -16,6 +18,7 @@ import {
   IconDotsVertical,
   IconEye,
   IconEyeOff,
+  IconInfoCircle,
   IconTrash,
 } from "@tabler/icons-react";
 import { useRef, useState } from "react";
@@ -82,6 +85,16 @@ export function SessionCard({ id }: { id: string }) {
           </Box>
           <Box>
             <Group gap="0">
+              <HoverCard shadow="xl" withArrow openDelay={200} closeDelay={100}>
+                <HoverCard.Target>
+                  <ThemeIcon size="sm" variant="white" color="gray">
+                    <IconInfoCircle />
+                  </ThemeIcon>
+                </HoverCard.Target>
+                <HoverCard.Dropdown>
+                  <Code block>{JSON.stringify(session.config, null, 4)}</Code>
+                </HoverCard.Dropdown>
+              </HoverCard>
               {isVisible ? (
                 <ActionIcon
                   size="sm"
