@@ -69,7 +69,9 @@ const initialConfig: SimulationConfig = {
 };
 
 export default function Navbar() {
-  const localConfig = sessionStorage.getItem(SOLAR_SIM_CONFIG_KEY);
+  const localConfig = sessionStorage
+    ? sessionStorage.getItem(SOLAR_SIM_CONFIG_KEY)
+    : undefined;
 
   const [sessionList] = useAtom(sessionListAtom);
   const [_, addSession] = useAtom(addSessionAtom);

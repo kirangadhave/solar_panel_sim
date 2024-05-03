@@ -13,7 +13,7 @@ interface Props {
 }
 
 export const metadata: Metadata = {
-  title: "Solar Panel Sim",
+  title: "Solar Panel Heat Transfer Simulator",
 };
 
 export default function RootLayout({ children }: Props) {

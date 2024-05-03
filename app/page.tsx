@@ -12,9 +12,13 @@ import {
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { IconHistory } from "@tabler/icons-react";
+import dynamic from "next/dynamic";
 import Aside from "./components/aside/Aside";
 import { Main } from "./components/main/Main";
-import Navbar from "./components/navbar/Navbar";
+
+const Navbar = dynamic(() => import("./components/navbar/Navbar"), {
+  ssr: false,
+});
 
 export default function IndexPage() {
   const [configuratorOpened, { toggle: configuratorToggle }] = useDisclosure();
